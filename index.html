@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perpustakaan SMA Negeri 1 Cibeber</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Perpustakaan SMA Negeri 1 Cibeber</h1>
+        <p id="welcome-message">Selamat datang! Hari ini adalah <span id="current-day"></span>.</p>
+        <nav>
+            <button onclick="showSection('home')">Home</button>
+            <button onclick="showSection('login')">Login Admin</button>
+            <button onclick="showSection('siswa')">Menu Siswa/Publik</button>
+            <button onclick="showSection('request')">Request/Saran</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Section Home -->
+        <section id="home" class="active">
+            <h2>Selamat Datang</h2>
+            <p>Ini adalah website sederhana untuk mengelola perpustakaan. Silakan pilih menu di atas.</p>
+            <h3>Informasi Peminjaman</h3>
+            <ul>
+                <li>Buku Pribadi: Durasi 1 minggu.</li>
+                <li>Buku Paket Pembelajaran: Durasi 1 jam pelajaran.</li>
+            </ul>
+        </section>
+
+        <!-- Section Login Admin -->
+        <section id="login">
+            <h2>Login Admin</h2>
+            <form id="admin-login-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-error" style="color: red;"></p>
+        </section>
+
+        <!-- Section Siswa/Publik (Anonym) -->
+        <section id="siswa">
+            <h2>Menu Siswa/Publik</h2>
+            <p>Di sini Anda bisa melihat daftar buku yang dipinjam (contoh simulasi). Masukkan nama kelas Anda untuk filter.</p>
+            <label for="kelas">Kelas:</label>
+            <input type="text" id="kelas" placeholder="Contoh: XII IPA 1">
+            <button onclick="loadBorrowedBooks()">Tampilkan Daftar Pinjam</button>
+            <table id="borrowed-books-table">
+                <thead>
+                    <tr>
+                        <th>Nama Siswa</th>
+                        <th>Buku Dipinjam</th>
+                        <th>Durasi</th>
+                        <th>Kelas</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Section Request/Saran (Anonym) -->
+        <section id="request">
+            <h2>Request/Saran Perpustakaan</h2>
+            <p>Kirim request buku baru atau saran anonymously.</p>
+            <form id="request-form">
+                <label for="request-text">Request/Saran:</label>
+                <textarea id="request-text" required></textarea>
+                <button type="submit">Kirim</button>
+            </form>
+            <p id="request-success" style="color: green;"></p>
+        </section>
+
+        <!-- Section Admin (Hidden until login) -->
+        <section id="admin" style="display: none;">
+            <h2>Dashboard Admin</h2>
+            <button onclick="logoutAdmin()">Logout</button>
+            <h3>Laporan Kunjungan Harian</h3>
+            <button onclick="addVisit()">Tambah Kunjungan</button>
+            <button onclick="exportToExcel()">Ekspor ke Excel</button>
+            <button onclick="importFromExcel()">Impor dari Excel</button>
+            <button onclick="clearVisits()">Hapus Semua</button>
+            <input type="file" id="import-file" style="display: none;" accept=".xlsx">
+            <table id="visits-table">
+                <thead>
+                    <tr>
+                        <th>Waktu/Tanggal</th>
+                        <th>Nama</th>
+                        <th>Jenis Kelamin (L/P)</th>
+                        <th>Maksud Kunjungan</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <!-- Form Tambah Kunjungan -->
+            <div id="add-visit-form" style="display: none;">
+                <h4>Tambah Kunjungan</h4>
+                <label for="visit-date">Waktu/Tanggal:</label>
+                <input type="datetime-local" id="visit-date" required>
+                <label for="visit-name">Nama:</label>
+                <input type="text" id="visit-name" required>
+                <label for="visit-gender">Jenis Kelamin:</label>
+                <select id="visit-gender" required>
+                    <option value="L">L (Laki-laki)</option>
+                    <option value="P">P (Perempuan)</option>
+                </select>
+                <label for="visit-purpose">Maksud Kunjungan:</label>
+                <select id="visit-purpose" required>
+                    <option value="Membaca">Membaca</option>
+                    <option value="Meminjam">Meminjam</option>
+                    <option value="Mengembalikan">Mengembalikan</option>
+                    <option value="Lain-lain">Lain-lain</option>
+                </select>
+                <button onclick="saveVisit()">Simpan</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 SMA Negeri 1 Cibeber. Dibuat dengan bantuan Grok.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
